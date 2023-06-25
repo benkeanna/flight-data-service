@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  api:
+    build:
+      context: ./
+    image: flight-data-service
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app:/app
