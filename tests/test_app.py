@@ -52,7 +52,7 @@ def test_aircrafts_filtered(client):
     response = client.get('/aircrafts/')
     assert response.status_code == 200
     assert len(response.json) == 1713
-    assert response.json[0] == {'aircraft_serial': '11906', 'county': '013', 'manufacturer': 'WILCOX H L/WILCOX C N',
+    assert response.json[0] == {'aircraft_serial': '11906', 'state': 'NH', 'manufacturer': 'WILCOX H L/WILCOX C N',
                                   'model': 'CW', 'name': 'FORSBERG CHARLES P', 'seats': 0}
 
 
@@ -61,14 +61,14 @@ def test_aircrafts_filtered_by_manufacturer(client):
     assert response.status_code == 200
     assert len(response.json) == 8
     assert response.json == [
-        {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '15074910', 'name': 'STEPHANY PETER T', 'county': '011'},
-        {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '58', 'name': 'FALCON AIR LINES INC', 'county': '095'},
-        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '051', 'name': 'VIALL WILLARD L', 'county': '021'},
-        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '61-0649', 'name': 'UNITED STATES AIR FORCE', 'county': '001'},
-        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '402C1020', 'name': 'HYANNIS AIR SERVICE INC', 'county': '001'},
-        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '32-704', 'name': 'MANCINI ANTONIO', 'county': '059'},
-        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '21059200', 'name': 'AITKEN GARY H', 'county': '059'},
-        {'model': 'JS1800H', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '76', 'name': 'WYBENGA JACK C', 'county': '085'}
+        {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '15074910', 'name': 'STEPHANY PETER T', 'state': 'FL'},
+        {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '58', 'name': 'FALCON AIR LINES INC', 'state': 'MO'},
+        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '051', 'name': 'VIALL WILLARD L', 'state': 'IL'},
+        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '61-0649', 'name': 'UNITED STATES AIR FORCE', 'state': 'DC'},
+        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '402C1020', 'name': 'HYANNIS AIR SERVICE INC', 'state': 'MA'},
+        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '32-704', 'name': 'MANCINI ANTONIO', 'state': 'CA'},
+        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '21059200', 'name': 'AITKEN GARY H', 'state': 'IN'},
+        {'model': 'JS1800H', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '76', 'name': 'WYBENGA JACK C', 'state': 'TX'}
     ]
 
 
@@ -76,16 +76,16 @@ def test_aircrafts_filtered_by_model(client):
     response = client.get('/aircrafts/?model=JS56C')
     assert response.status_code == 200
     assert len(response.json) == 2
-    assert response.json == [{'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '15074910', 'name': 'STEPHANY PETER T', 'county': '011'},
-                             {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '58', 'name': 'FALCON AIR LINES INC', 'county': '095'}]
+    assert response.json == [{'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '15074910', 'name': 'STEPHANY PETER T', 'state': 'FL'},
+                             {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '58', 'name': 'FALCON AIR LINES INC', 'state': 'MO'}]
 
 
 def test_aircrafts_filtered_by_model_and_manufacturer(client):
     response = client.get('/aircrafts/?manufacturer=STOKES&model=JS56C')
     assert response.status_code == 200
     assert len(response.json) == 2
-    assert response.json == [{'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '15074910', 'name': 'STEPHANY PETER T', 'county': '011'},
-                             {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '58', 'name': 'FALCON AIR LINES INC', 'county': '095'}]
+    assert response.json == [{'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '15074910', 'name': 'STEPHANY PETER T', 'state': 'FL'},
+                             {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '58', 'name': 'FALCON AIR LINES INC', 'state': 'MO'}]
 
 
 def test_aircrafts_filtered_by_model_and_manufacturer_different(client):
@@ -97,10 +97,21 @@ def test_aircrafts_filtered_by_model_and_manufacturer_different(client):
 def test_aircraft_reports(client):
     response = client.get('/aircrafts/reports/')
     assert response.status_code == 200
-    assert len(response.json) == 1621
+    assert len(response.json) == 1700
+    assert response.json[0] == {'count': 1, 'manufacturer': 'ABRON-HUBERT W JR', 'model': 'KR-1', 'state': 'TX'}
 
 
 def test_aircraft_reports_pivot(client):
     response = client.get('/aircrafts/reports/pivot/')
     assert response.status_code == 200
-    assert len(response.json) == 1621
+    assert len(response.json) == 1624
+    assert response.json[0] == {'manufacturer': 'ABRON-HUBERT W JR', 'model': 'KR-1', 'AK': 'NULL', 'AL': 'NULL',
+                                'AP': 'NULL', 'AR': 'NULL', 'AZ': 'NULL', 'CA': 'NULL', 'CO': 'NULL', 'CT': 'NULL',
+                                'DC': 'NULL', 'DE': 'NULL', 'FL': 'NULL', 'GA': 'NULL', 'GU': 'NULL', 'HI': 'NULL',
+                                'IA': 'NULL', 'ID': 'NULL', 'IL': 'NULL', 'IN': 'NULL', 'KS': 'NULL', 'KY': 'NULL',
+                                'LA': 'NULL', 'MA': 'NULL', 'MD': 'NULL', 'ME': 'NULL', 'MI': 'NULL', 'MN': 'NULL',
+                                'MO': 'NULL', 'MS': 'NULL', 'MT': 'NULL', 'NC': 'NULL', 'ND': 'NULL', 'NE': 'NULL',
+                                'NH': 'NULL', 'NJ': 'NULL', 'NM': 'NULL', 'NV': 'NULL', 'NY': 'NULL', 'OH': 'NULL',
+                                'OK': 'NULL', 'OR': 'NULL', 'PA': 'NULL', 'PR': 'NULL', 'RI': 'NULL', 'SC': 'NULL',
+                                'SD': 'NULL', 'TN': 'NULL', 'TX': 1.0, 'UT': 'NULL', 'VA': 'NULL', 'VI': 'NULL',
+                                'VT': 'NULL', 'WA': 'NULL', 'WI': 'NULL', 'WV': 'NULL', 'WY': 'NULL'}
