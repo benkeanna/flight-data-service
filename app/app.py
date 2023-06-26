@@ -1,11 +1,11 @@
 from flask import Flask, Response, request
-from flask_caching import Cache
 
 import services
+from config import Config
 
 app = Flask(__name__)
-cache = Cache(app, config={'CACHE_TYPE': 'simple'})
-repository = services.DataRepository(cache)
+app.config.from_object(Config)
+repository = services.faa_data_repository_factory(app.config['FFA_DATA_DIR_PATH'])
 
 
 @app.route('/info/')
@@ -45,6 +45,14 @@ def aircrafts_report():
 @app.route('/aircrafts/reports/pivot/')
 def aircrafts_report_pivot():
     result = repository.get_report_pivot()
+    return Response(
+       result.to_json(orient='records'),
+       mimetype='application/json')
+
+
+@app.route('/sql/', methods=['POST'])
+def data_by_sql_string():
+    result = repository.get_data_by_sql_string(request.json['sql'])
     return Response(
        result.to_json(orient='records'),
        mimetype='application/json')

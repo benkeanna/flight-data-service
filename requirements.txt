@@ -7,6 +7,7 @@ colorama==0.4.6
 Flask==2.3.2
 Flask-Caching==2.0.2
 Flask-Testing==0.8.1
+greenlet==2.0.2
 idna==3.4
 iniconfig==2.0.0
 itsdangerous==2.1.2
@@ -17,6 +18,7 @@ mypy-extensions==1.0.0
 numpy==1.25.0
 packaging==23.1
 pandas==2.0.2
+pandasql==0.7.3
 pluggy==1.2.0
 pyarrow==12.0.1
 pytest==7.4.0
@@ -24,6 +26,7 @@ python-dateutil==2.8.2
 pytz==2023.3
 requests==2.31.0
 six==1.16.0
+SQLAlchemy==2.0.17
 typing_extensions==4.6.3
 tzdata==2023.3
 urllib3==2.0.3

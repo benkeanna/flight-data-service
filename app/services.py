@@ -1,35 +1,26 @@
 import os
 import pandas as pd
+from pandasql import sqldf
 from pyarrow import parquet as pq
 
 
-class DataRepository:
-    def __init__(self, cache):
-        self.cache = cache
-        self.data_dir = os.path.join(os.path.dirname(__file__), 'data')
-        self.filenames = os.listdir(self.data_dir)
+def faa_data_repository_factory(data_dir_path):
+    filenames = os.listdir(data_dir_path)
+    pd_data = {}
+    for filename in filenames:
+        filepath = os.path.join(data_dir_path, filename)
+        data = pq.read_table(filepath)
+        pd_data[filename] = data
+    return FAADataRepository(pd_data)
 
-    def _get_parquet_data(self):
-        pd_data = {}
-        for filename in self.filenames:
-            data = self.cache.get(filename)
-            if not data:
-                self._load()
-                data = self.cache.get(filename)
-            pd_data[filename] = data
-        return pd_data
 
-    def _load(self):
-        for filename in self.filenames:
-            if not self.cache.get(filename):
-                filepath = os.path.join(self.data_dir, filename)
-                data = pq.read_table(filepath)
-                self.cache.set(filename, data, timeout=86400)
+class FAADataRepository:
+    def __init__(self, data):
+        self.pq_data = data
 
     def get_info(self):
-        pq_data = self._get_parquet_data()
         info_dict = {'data_file_name': [], 'column_list': [], 'total_number_of_rows': []}
-        for filename, data in pq_data.items():
+        for filename, data in self.pq_data.items():
             df = data.to_pandas()
             info_dict['data_file_name'].append(filename)
             info_dict['column_list'].append(df.columns.values.tolist())
@@ -37,8 +28,7 @@ class DataRepository:
         return pd.DataFrame.from_dict(info_dict)
 
     def get_aircraft_models(self):
-        pq_data = self._get_parquet_data()
-        models_df = pq_data['aircraft_models.parquet'].to_pandas()
+        models_df = self.pq_data['aircraft_models.parquet'].to_pandas()
         return models_df.filter(['model', 'manufacturer', 'seats'], axis=1)
 
     def get_aircrafts_filtered(self, manufacturer=None, model=None):
@@ -63,9 +53,15 @@ class DataRepository:
         pivot_df.reset_index(inplace=True)
         return pivot_df
 
+    def get_data_by_sql_string(self, sql_string):
+        dataframes = {}
+        for name, data in self.pq_data.items():
+            name, _ = name.split('.')
+            dataframes[name] = data.to_pandas()
+        return sqldf(sql_string, dataframes)
+
     def _get_active_aircraft_with_models_joined(self):
-        pq_data = self._get_parquet_data()
-        models_df = pq_data['aircraft_models.parquet'].to_pandas()
-        aircraft_df = pq_data['aircraft.parquet'].to_pandas()
+        models_df = self.pq_data['aircraft_models.parquet'].to_pandas()
+        aircraft_df = self.pq_data['aircraft.parquet'].to_pandas()
         active_aircraft_df = aircraft_df.loc[aircraft_df['status_code'] == 'A']
         return pd.concat([models_df, active_aircraft_df], axis=1, join="inner")

@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from app import app
@@ -115,3 +117,16 @@ def test_aircraft_reports_pivot(client):
                                 'OK': 'NULL', 'OR': 'NULL', 'PA': 'NULL', 'PR': 'NULL', 'RI': 'NULL', 'SC': 'NULL',
                                 'SD': 'NULL', 'TN': 'NULL', 'TX': 1.0, 'UT': 'NULL', 'VA': 'NULL', 'VI': 'NULL',
                                 'VT': 'NULL', 'WA': 'NULL', 'WI': 'NULL', 'WV': 'NULL', 'WY': 'NULL'}
+
+
+def test_data_by_sql_string(client):
+    response = client.post('/sql/', data=json.dumps({"sql": "SELECT * FROM aircraft;"}), headers={"Content-Type": "application/json"})
+    assert response.status_code == 200
+    assert response.json[0] == {'id': 100, 'tail_num': 'N10036', 'aircraft_serial': '11906',
+                                'aircraft_model_code': '7100510', 'aircraft_engine_code': '17003', 'year_built': 1944,
+                                'aircraft_type_id': 4, 'aircraft_engine_type_id': 1, 'registrant_type_id': 1,
+                                'name': 'FORSBERG CHARLES P', 'address1': 'PO BOX 1', 'address2': None,
+                                'city': 'NORTH SUTTON', 'state': 'NH', 'zip': '03260-0001', 'region': 'E',
+                                'county': '013', 'country': 'US', 'certification': '1N', 'status_code': 'A',
+                                'mode_s_code': '50003624', 'fract_owner': None, 'last_action_date': '2006-01-17',
+                                'cert_issue_date': '1982-04-27', 'air_worth_date': '1972-09-11'}
