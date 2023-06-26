@@ -4,7 +4,7 @@ from flask import Flask, Response, request
 from flask_caching import Cache
 from pyarrow import parquet as pq
 
-from app import services
+import services
 
 data_dir = os.path.join(os.path.dirname(__file__), 'data')
 filenames = os.listdir(data_dir)
@@ -41,7 +41,7 @@ def info():
        mimetype='application/json')
 
 
-@app.route('/aircrafts/models')
+@app.route('/aircrafts/models/')
 def aircrafts_models():
     pd_data = get_parquet_data()
     pd_info = services.get_aircraft_models(pd_data)
@@ -55,13 +55,13 @@ def aircrafts_filtered():
     manufacturer = request.args.get('manufacturer')
     model = request.args.get('model')
     pd_data = get_parquet_data()
-    pd_info = services.get_aircrafts_filtered(pd_data)
+    pd_info = services.get_aircrafts_filtered(pd_data, manufacturer, model)
     return Response(
        pd_info.to_json(orient='index'),
        mimetype='application/json')
 
 
-@app.route('/aircrafts/reports')
+@app.route('/aircrafts/reports/')
 def aircrafts_report():
     pd_data = get_parquet_data()
     pd_info = services.get_report(pd_data)
@@ -70,7 +70,7 @@ def aircrafts_report():
        mimetype='application/json')
 
 
-@app.route('/aircrafts/reports/pivot')
+@app.route('/aircrafts/reports/pivot/')
 def aircrafts_report_pivot():
     pd_data = get_parquet_data()
     pd_info = services.get_report_pivot(pd_data)
