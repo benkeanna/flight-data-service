@@ -9,3 +9,5 @@ services:
       - "5000:5000"
     volumes:
       - ./app:/app
+    environment:
+      - FLASK_FAA_DATA_DIR_PATH=/app/data

@@ -1,11 +1,14 @@
 import json
 
 import pytest
+from dotenv import load_dotenv
 
 from app import create_app
 
+
 @pytest.fixture
 def client():
+    load_dotenv('.env.test')
     app = create_app()
     app.testing = True
     with app.test_client() as client:

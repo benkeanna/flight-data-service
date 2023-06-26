@@ -1,16 +1,16 @@
+from __future__ import annotations
+
 from flask import Flask, current_app
 
 import services
-from config import Config
-
 import routes
 
 
-def create_app():
+def create_app() -> Flask:
     app = Flask(__name__)
-    app.config.from_object(Config)
 
-    repository = services.faa_data_repository_factory(app.config['FFA_DATA_DIR_PATH'])
+    app.config.from_prefixed_env()
+    repository = services.faa_data_repository_factory(app.config['FAA_DATA_DIR_PATH'])
     with app.app_context():
         current_app.repository = repository
 
