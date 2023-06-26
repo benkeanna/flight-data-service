@@ -58,7 +58,7 @@ def test_aircrafts_filtered(client):
     assert response.status_code == 200
     assert len(response.json) == 1713
     assert response.json[0] == {'aircraft_serial': '11906', 'state': 'NH', 'manufacturer': 'WILCOX H L/WILCOX C N',
-                                  'model': 'CW', 'name': 'FORSBERG CHARLES P', 'seats': 0}
+                                'model': 'CW', 'name': 'FORSBERG CHARLES P', 'seats': 0}
 
 
 def test_aircrafts_filtered_by_manufacturer(client):
@@ -66,14 +66,22 @@ def test_aircrafts_filtered_by_manufacturer(client):
     assert response.status_code == 200
     assert len(response.json) == 8
     assert response.json == [
-        {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '15074910', 'name': 'STEPHANY PETER T', 'state': 'FL'},
-        {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '58', 'name': 'FALCON AIR LINES INC', 'state': 'MO'},
-        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '051', 'name': 'VIALL WILLARD L', 'state': 'IL'},
-        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '61-0649', 'name': 'UNITED STATES AIR FORCE', 'state': 'DC'},
-        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '402C1020', 'name': 'HYANNIS AIR SERVICE INC', 'state': 'MA'},
-        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '32-704', 'name': 'MANCINI ANTONIO', 'state': 'CA'},
-        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '21059200', 'name': 'AITKEN GARY H', 'state': 'IN'},
-        {'model': 'JS1800H', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '76', 'name': 'WYBENGA JACK C', 'state': 'TX'}
+        {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '15074910',
+         'name': 'STEPHANY PETER T', 'state': 'FL'},
+        {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '58',
+         'name': 'FALCON AIR LINES INC', 'state': 'MO'},
+        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '051', 'name': 'VIALL WILLARD L',
+         'state': 'IL'},
+        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '61-0649',
+         'name': 'UNITED STATES AIR FORCE', 'state': 'DC'},
+        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '402C1020',
+         'name': 'HYANNIS AIR SERVICE INC', 'state': 'MA'},
+        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '32-704', 'name': 'MANCINI ANTONIO',
+         'state': 'CA'},
+        {'model': 'JS77C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '21059200', 'name': 'AITKEN GARY H',
+         'state': 'IN'},
+        {'model': 'JS1800H', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '76', 'name': 'WYBENGA JACK C',
+         'state': 'TX'}
     ]
 
 
@@ -81,16 +89,20 @@ def test_aircrafts_filtered_by_model(client):
     response = client.get('/aircrafts/?model=JS56C')
     assert response.status_code == 200
     assert len(response.json) == 2
-    assert response.json == [{'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '15074910', 'name': 'STEPHANY PETER T', 'state': 'FL'},
-                             {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '58', 'name': 'FALCON AIR LINES INC', 'state': 'MO'}]
+    assert response.json == [{'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '15074910',
+                              'name': 'STEPHANY PETER T', 'state': 'FL'},
+                             {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '58',
+                              'name': 'FALCON AIR LINES INC', 'state': 'MO'}]
 
 
 def test_aircrafts_filtered_by_model_and_manufacturer(client):
     response = client.get('/aircrafts/?manufacturer=STOKES&model=JS56C')
     assert response.status_code == 200
     assert len(response.json) == 2
-    assert response.json == [{'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '15074910', 'name': 'STEPHANY PETER T', 'state': 'FL'},
-                             {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '58', 'name': 'FALCON AIR LINES INC', 'state': 'MO'}]
+    assert response.json == [{'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '15074910',
+                              'name': 'STEPHANY PETER T', 'state': 'FL'},
+                             {'model': 'JS56C', 'manufacturer': 'STOKES', 'seats': 0, 'aircraft_serial': '58',
+                              'name': 'FALCON AIR LINES INC', 'state': 'MO'}]
 
 
 def test_aircrafts_filtered_by_model_and_manufacturer_different(client):
@@ -123,7 +135,8 @@ def test_aircraft_reports_pivot(client):
 
 
 def test_data_by_sql_string(client):
-    response = client.post('/sql/', data=json.dumps({"sql": "SELECT * FROM aircraft;"}), headers={"Content-Type": "application/json"})
+    response = client.post('/sql/', data=json.dumps({"sql": "SELECT * FROM aircraft;"}),
+                           headers={"Content-Type": "application/json"})
     assert response.status_code == 200
     assert response.json[0] == {'id': 100, 'tail_num': 'N10036', 'aircraft_serial': '11906',
                                 'aircraft_model_code': '7100510', 'aircraft_engine_code': '17003', 'year_built': 1944,
@@ -133,3 +146,8 @@ def test_data_by_sql_string(client):
                                 'county': '013', 'country': 'US', 'certification': '1N', 'status_code': 'A',
                                 'mode_s_code': '50003624', 'fract_owner': None, 'last_action_date': '2006-01-17',
                                 'cert_issue_date': '1982-04-27', 'air_worth_date': '1972-09-11'}
+
+
+def test_data_by_sql_string_bad_request(client):
+    response = client.post('/sql/', data=json.dumps({"sql": ""}), headers={"Content-Type": "application/json"})
+    assert response.status_code == 400

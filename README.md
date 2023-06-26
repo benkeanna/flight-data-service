@@ -15,7 +15,7 @@ Run `curl http://127.0.0.1:5000/aircrafts/models/`
 ### Get active aircraft by manufacturer and model
 Run `curl http://127.0.0.1:5000/aircrafts/?manufacturer=manufacturer&model=model`
 
-### Get report of active aircraft models by county
+### Get report of active aircraft models by state
 Run `curl http://127.0.0.1:5000/aircrafts/report/`
 
 ### Get pivot report of active aircraft models by count
