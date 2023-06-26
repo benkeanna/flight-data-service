@@ -52,7 +52,7 @@ def test_aircrafts_filtered(client):
     response = client.get('/aircrafts/')
     assert response.status_code == 200
     assert len(response.json) == 1713
-    assert response.json[0] == {'aircraft_serial': '11906', 'county': '013', 'manufacturer': 'WILCOX H L/WILCOX C N', 'model': 'CW', 'name': 'FORSBERG CHARLES P', 'seats': 0}
+    assert response.json['0'] == {'aircraft_serial': '11906', 'county': '013', 'manufacturer': 'WILCOX H L/WILCOX C N', 'model': 'CW', 'name': 'FORSBERG CHARLES P', 'seats': 0}
 
 
 def test_aircrafts_filtered_by_manufacturer(client):
@@ -99,8 +99,10 @@ def test_aircrafts_filtered_by_model_and_manufacturer_different(client):
 def test_aircraft_reports(client):
     response = client.get('/aircrafts/reports/')
     assert response.status_code == 200
+    assert len(response.json) == 1621
 
 
 def test_aircraft_reports_pivot(client):
     response = client.get('/aircrafts/reports/pivot/')
     assert response.status_code == 200
+    assert len(response.json) == 1621
