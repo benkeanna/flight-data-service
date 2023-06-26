@@ -13,7 +13,7 @@ Run ` curl http://127.0.0.1:5000/info/`
 Run ` curl http://127.0.0.1:5000/aircrafts/models/`
 
 ### Get active aircraft by manufacturer and model
-Run ` curl http://127.0.0.1:5000/aircrafts/`
+Run ` curl http://127.0.0.1:5000/aircrafts/?manufacturer=manufacturer&model=model`
 
 ### Get report of active aircraft models by county
 Run ` curl http://127.0.0.1:5000/aircrafts/report/`
